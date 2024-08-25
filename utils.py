@@ -23,6 +23,33 @@ def find_string_between(data, first, last, start_idx):
     return data[first_idx:last_idx]
 
 
+def find_notice_keyword(data, notice_keyword, notice_start_idx):
+    """Finds the data associated with `notice_keyword` in the text notices.
+    
+    Parameters
+    ----------
+    data: string
+        The text notice that is being parsed.
+    notice_keyword: string
+        the keyword used in the notice for some quantity
+    notice_start_idx: int
+        The index at which the current text notice begins.
+    
+    Returns
+    -------
+    string
+        the value associated with that field in the text notice.
+    
+    Notes
+    -----
+    The functions splits the string associated with the field and 
+    returns the 0-indexed value from the resultant list.
+    """
+    keyword_data = find_string_between(data, notice_keyword, "\n", notice_start_idx)
+    val = keyword_data.split()[0]
+    return val
+
+
 def set_id(data, notice_keyword, notice_start_idx):
     """Function to extract id from text notice.
 
