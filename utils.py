@@ -1,4 +1,3 @@
-import requests
 
 
 def find_string_between(data, first, last, start_idx):
@@ -22,43 +21,6 @@ def find_string_between(data, first, last, start_idx):
     first_idx = data.find(first, start_idx) + len(first)
     last_idx = data.find(last, first_idx)
     return data[first_idx:last_idx]
-
-
-def parse_trigger_ids(link):
-    """Returns a list of trigger_id present in `link`.
-
-    The function parses through each row and hyperlink present
-    in the html table in `link` and returns a list of strings.
-
-    Parameters
-    ----------
-    link: string
-        The webpage with the trigger ids listed.
-    
-    Returns
-    -------
-    array-like
-        A list of trigger ids as strings.
-    """
-    file = requests.get(link)
-    data = file.text
-
-    start_idx = data.find('<!XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX>')
-    trig_nums = set({})
-
-    while True:
-        row_idx = data.find("<tr", start_idx)
-        link_idx = data.find("<a", row_idx)
-
-        val = find_string_between(data, ">", "</a>", link_idx)
-
-        start_idx = data.find("</tr>", row_idx)
-
-        if start_idx == -1:
-            break
-        else:
-            trig_nums.add(val)
-    return trig_nums
 
 
 def set_id(data, notice_keyword, notice_start_idx):
