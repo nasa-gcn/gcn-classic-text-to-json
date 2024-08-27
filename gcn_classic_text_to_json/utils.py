@@ -141,7 +141,7 @@ def set_alert_datetime(data, notice_keyword, notice_start_idx):
     ]
 
     alert_datetime_data = find_string_between(
-        data, notice_keyword, notice_start_idx
+        data, notice_keyword, "\n", notice_start_idx
     ).split()
 
     alert_date, alert_month = (
