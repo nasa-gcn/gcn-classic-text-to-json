@@ -1,8 +1,6 @@
-
-
 def find_string_between(data, first, last, start_idx):
     """Find string between `first` and `last` beginning at `start_idx`.
-    
+
     Parameters
     ----------
     data: string
@@ -13,7 +11,7 @@ def find_string_between(data, first, last, start_idx):
         The text succeeding the string to be returned.
     start_idx: int
         The index from which to begin search for `first`.
-        
+
     Returns
     -------
     string
@@ -25,7 +23,7 @@ def find_string_between(data, first, last, start_idx):
 
 def find_notice_keyword(data, notice_keyword, notice_start_idx):
     """Finds the data associated with `notice_keyword` in the text notices.
-    
+
     Parameters
     ----------
     data: string
@@ -34,15 +32,15 @@ def find_notice_keyword(data, notice_keyword, notice_start_idx):
         the keyword used in the notice for some quantity
     notice_start_idx: int
         The index at which the current text notice begins.
-    
+
     Returns
     -------
     string
         the value associated with that field in the text notice.
-    
+
     Notes
     -----
-    The functions splits the string associated with the field and 
+    The functions splits the string associated with the field and
     returns the 0-indexed value from the resultant list.
     """
     keyword_data = find_string_between(data, notice_keyword, "\n", notice_start_idx)
@@ -78,7 +76,7 @@ def set_id(data, notice_keyword, notice_start_idx):
 
 def set_ra_and_dec(data, ra_notice_keyword, dec_notice_keyword, notice_start_idx):
     """Function to extract ra/dec from text notices.
-    
+
     Parameters
     ----------
     data: string
@@ -94,7 +92,7 @@ def set_ra_and_dec(data, ra_notice_keyword, dec_notice_keyword, notice_start_idx
     -------
     tuple of floats
         A tuple containing ra and dec
-    
+
     Notes
     -----
     Assumes that ra/dec is present in every text notice.
@@ -108,7 +106,7 @@ def set_ra_and_dec(data, ra_notice_keyword, dec_notice_keyword, notice_start_idx
 
 def set_alert_datetime(data, notice_keyword, notice_start_idx):
     """Function to extract alert_datetime from text notices and convert to ISO 8601 format.
-    
+
     Parameters
     ----------
     data: string
@@ -127,19 +125,37 @@ def set_alert_datetime(data, notice_keyword, notice_start_idx):
     -----
     Assumes that alert_datetime is present in every text notice.
     """
-    months_of_the_year = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    
-    alert_datetime_data = find_string_between(data, notice_keyword, notice_start_idx).split()
+    months_of_the_year = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
 
-    alert_date, alert_month = alert_datetime_data[1], months_of_the_year.index(alert_datetime_data[2])+1
-    alert_year, alert_time = "20"+alert_datetime_data[3], alert_datetime_data[4]
+    alert_datetime_data = find_string_between(
+        data, notice_keyword, notice_start_idx
+    ).split()
+
+    alert_date, alert_month = (
+        alert_datetime_data[1],
+        months_of_the_year.index(alert_datetime_data[2]) + 1,
+    )
+    alert_year, alert_time = "20" + alert_datetime_data[3], alert_datetime_data[4]
     alert_datetime = f"{alert_year}-{alert_month}-{alert_date}T{alert_time}Z"
     return alert_datetime
 
 
 def set_trigger_time(data, notice_date_keyword, notice_time_keyword, notice_start_idx):
     """Funtion to extract trigger_time from text notices and convert to ISO 8601 format.
-    
+
     Parameters
     ----------
     data: string
@@ -150,17 +166,19 @@ def set_trigger_time(data, notice_date_keyword, notice_time_keyword, notice_star
         The text notice equivalent for trigger time.
     notice_start_idx: int
         The index at which the current text notice begins.
-        
+
     Returns
     -------
     string
         returns datetime in ISO 8601 format.
-        
+
     Notes
     -----
     The date is either the last or the second last value in the trigger_date field equivalent
     for the text notices. The code handles both possibilities."""
-    trigger_date_data = find_string_between(data, notice_date_keyword, "\n", notice_start_idx).split()
+    trigger_date_data = find_string_between(
+        data, notice_date_keyword, "\n", notice_start_idx
+    ).split()
 
     trigger_date = trigger_date_data[-1]
     if trigger_date == "(yy-mm-dd)":
@@ -169,6 +187,6 @@ def set_trigger_time(data, notice_date_keyword, notice_time_keyword, notice_star
     trigger_time_idx = data.find(notice_time_keyword, notice_start_idx)
     trigger_time_start_idx = data.find("{", trigger_time_idx)
     trigger_time_end_idx = data.find("}", trigger_time_start_idx)
-    trigger_time = data[trigger_time_start_idx+1:trigger_time_end_idx]
+    trigger_time = data[trigger_time_start_idx + 1 : trigger_time_end_idx]
 
     return f"{trigger_date.replace('/', '-', 2)}T{trigger_time}Z"
