@@ -22,3 +22,15 @@ This package uses [Poetry](https://python-poetry.org) for packaging and Python v
 5.  Run the following command to launch a shell that is preconfigured with the project's virtual environment:
 
         poetry shell
+
+## How to execute package to obtain GCN Classic JSONs
+
+The package can be executed through two methods:
+
+1. You can obtain all the JSONs associated with a single mission in your current working directory by running the following command:
+
+        python3 -m gcn_classic_text_to_json.notices.{missions_name}.__init__
+
+2. Alternatively, you can obtain all JSONs associated with all missions by running the following command with the repository path as your current working directory:
+
+        ./main.sh
