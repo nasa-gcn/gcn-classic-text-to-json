@@ -29,8 +29,8 @@ The package can be executed through two methods:
 
 1. You can obtain all the JSONs associated with a single mission in your current working directory by running the following command:
 
-        python3 -m gcn_classic_text_to_json.notices.{missions_name}.__init__
+        python3 -m gcn_classic_text_to_json.notices.{missions_name}
 
-2. Alternatively, you can obtain all JSONs associated with all missions by running the following command with the repository path as your current working directory:
+2. Alternatively, you can obtain all JSONs associated with all missions in your current working directory by running the following command:
 
-        ./main.sh
+        python3 -m gcn_classic_text_to_json
