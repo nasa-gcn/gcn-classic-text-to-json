@@ -9,6 +9,11 @@ contain_prob = norm.cdf(3) - norm.cdf(-3)
 
 
 def create_all_alexis_jsons():
+    """Function parse through an HTML table to generate the JSON associated with each row
+
+    Notes
+    ------
+    Function skips through the first row with a tag as that is the row associated with the row headers."""
     output_path = "./output/alexis_jsons/"
     if not os.path.exists(output_path):
         os.makedirs(output_path)
