@@ -1,5 +1,7 @@
 # ALEXIS text conversion
 
+Parses through the table associated with all ALEXIS triggers and creates a JSON with GCN schema keywords. Creates a `alexis_jsons` directory inside an `output` directory and saves jsons as `ALEXIS_{serial_number}.json` where serial_number is a random iterating number with no association to the notices.
+
 ### Uses the following fields from the core schema for text notice fields
 - `alert_datetime` &#8594; Date and Time UT
 - `ra` &#8594; RA
