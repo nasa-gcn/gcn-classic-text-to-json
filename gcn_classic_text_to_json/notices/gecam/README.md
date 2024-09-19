@@ -1,5 +1,7 @@
 # GECAM Text Conversion
 
+Parses through all webpages with GECAM text notices and creates a JSON with GCN schema keywords. Creates a `gecam_jsons` directory inside an `output` directory and saves jsons as `GECAM_{serial_number}_{record_number}.json` where serial_number is a random iterating number with no association to the notices and record_number is the current notice in the webpage.
+
 ### Uses the following fields from the core schema for text notice fields
 - `id` &#8594; TRIGGER_NUMBER
 - `ra` &#8594; SRC_RA
