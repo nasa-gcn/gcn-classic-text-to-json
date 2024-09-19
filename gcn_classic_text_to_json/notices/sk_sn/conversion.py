@@ -41,6 +41,9 @@ def text_to_json_sk_sn(notice, input):
         A dictionary compliant with the associated schema for the mission."""
     output_dict = conversion.text_to_json(notice, input)
 
+    output_dict["$schema"] = (
+        "https://gcn.nasa.gov/schema/main/gcn/notices/classic/sk_sn/alert.schema.json"
+    )
     output_dict["mission"] = "Super-Kamiokande"
     output_dict["messenger"] = "Neutrino"
 
@@ -68,7 +71,8 @@ def create_all_sk_sn_jsons():
 
     archive_link = "https://gcn.gsfc.nasa.gov/sk_sn_events.html"
     prefix = "https://gcn.gsfc.nasa.gov/"
-    links_set = conversion.parse_trigger_links(archive_link, prefix)
+    search_string = "other/.*sk_sn"
+    links_set = conversion.parse_trigger_links(archive_link, prefix, search_string)
     links_list = list(links_set)
 
     for sernum in range(len(links_list)):
@@ -79,7 +83,7 @@ def create_all_sk_sn_jsons():
         while True:
             end_idx = data.find("\n \n ", start_idx)
             notice_message = email.message_from_string(data[start_idx:end_idx].strip())
-            comment = "".join(notice_message.get_all("COMMENTS"))
+            comment = "\n".join(notice_message.get_all("COMMENTS"))
             notice_dict = dict(notice_message)
             notice_dict["COMMENTS"] = comment
 

@@ -15,7 +15,7 @@ input = {
         "trigger_time": ["TRIGGER_DATE", "TRIGGER_TIME"],
     },
     "additional": {
-        "url": ("LC_URL", "string"),
+        "lightcurve_url": ("LC_URL", "string"),
         "rate_snr": ("SIGNIFICANCE", "float"),
         "foreground_duration": ("FOREGND_DUR", "float"),
         "background_duration": ("BACKGND_DUR1", "float"),
@@ -32,8 +32,8 @@ def text_to_json_calet(notice, record_number, input):
         The text notice that is being parsed.
     record_number: int
         The current notice in the webpage being parsed.
-    notice_start_idx: int
-        The index at which the current text notice begins.
+    input: dict
+        The mapping between text notices keywords and GCN schema keywords.
 
     Returns
     -------
@@ -47,6 +47,9 @@ def text_to_json_calet(notice, record_number, input):
     else:
         output_dict["alert_type"] = "update"
 
+    output_dict["$schema"] = (
+        "https://gcn.nasa.gov/schema/main/gcn/notices/classic/calet_gbm/alert.schema.json"
+    )
     output_dict["mission"] = "CALET"
     output_dict["instrument"] = "GBM"
     output_dict["trigger_type"] = "rate"
@@ -72,14 +75,15 @@ def text_to_json_calet(notice, record_number, input):
 
 
 def create_all_calet_jsons():
-    """Creates a `calet_json` directory and fills it with the json for all CALET triggers."""
+    """Creates a `calet_jsons` directory and fills it with the json for all CALET triggers."""
     output_path = "./output/calet_jsons/"
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
     archive_link = "https://gcn.gsfc.nasa.gov/calet_triggers.html"
     prefix = "https://gcn.gsfc.nasa.gov/"
-    links_set = conversion.parse_trigger_links(archive_link, prefix)
+    search_string = "other/.*calet"
+    links_set = conversion.parse_trigger_links(archive_link, prefix, search_string)
     links_list = list(links_set)
 
     for sernum in range(len(links_list)):
@@ -91,13 +95,15 @@ def create_all_calet_jsons():
         while True:
             end_idx = data.find("\n \n ", start_idx)
             notice_message = email.message_from_string(data[start_idx:end_idx].strip())
-            comment = "".join(notice_message.get_all("COMMENTS"))
+            comment = "\n".join(notice_message.get_all("COMMENTS"))
             notice_dict = dict(notice_message)
             notice_dict["COMMENTS"] = comment
 
             output = text_to_json_calet(notice_dict, record_number, input)
 
-            with open(f"{output_path}CALET_GBM_{sernum+1}.json", "w") as f:
+            with open(
+                f"{output_path}CALET_GBM_{sernum+1}_{record_number}.json", "w"
+            ) as f:
                 json.dump(output, f)
 
             record_number += 1

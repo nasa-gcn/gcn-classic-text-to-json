@@ -63,6 +63,10 @@ def text_to_json_snews(notice, input):
         A dictionary compliant with the associated schema for the mission."""
     output_dict = conversion.text_to_json(notice, input)
 
+    output_dict["$schema"] = (
+        "https://gcn.nasa.gov/schema/main/gcn/notices/classic/snews/alert.schema.json"
+    )
+
     if notice["NOTICE_TYPE"].split()[0] == "TEST":
         output_dict["alert_tense"] = "test"
 
@@ -134,7 +138,8 @@ def create_all_snews_jsons():
 
     archive_link = "https://gcn.gsfc.nasa.gov/snews_trans.html"
     prefix = "https://gcn.gsfc.nasa.gov/"
-    links_set = conversion.parse_trigger_links(archive_link, prefix)
+    search_string = "other/.*snews"
+    links_set = conversion.parse_trigger_links(archive_link, prefix, search_string)
     links_list = list(links_set)
 
     for sernum in range(len(links_list)):
@@ -145,7 +150,7 @@ def create_all_snews_jsons():
         while True:
             end_idx = data.find("\n \n ", start_idx)
             notice_message = email.message_from_string(data[start_idx:end_idx].strip())
-            comment = "".join(notice_message.get_all("COMMENTS"))
+            comment = "\n".join(notice_message.get_all("COMMENTS"))
             notice_dict = dict(notice_message)
             notice_dict["COMMENTS"] = comment
 

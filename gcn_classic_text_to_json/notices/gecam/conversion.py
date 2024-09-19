@@ -51,6 +51,9 @@ def text_to_json_gecam(notice, input, record_number):
         A dictionary compliant with the associated schema for the mission."""
     output_dict = conversion.text_to_json(notice, input)
 
+    output_dict["$schema"] = (
+        "https://gcn.nasa.gov/schema/main/gcn/notices/classic/gecam/alert.schema.json"
+    )
     output_dict["mission"] = "GECAM"
     output_dict["trigger_type"] = "rate"
     output_dict["messenger"] = "EM"
@@ -97,7 +100,8 @@ def create_all_gecam_jsons():
 
     archive_link = "https://gcn.gsfc.nasa.gov/gecam_events.html"
     prefix = "https://gcn.gsfc.nasa.gov/"
-    links_set = conversion.parse_trigger_links(archive_link, prefix)
+    search_string = "other/.*gecam"
+    links_set = conversion.parse_trigger_links(archive_link, prefix, search_string)
     links_list = list(links_set)
 
     for sernum in range(len(links_list)):

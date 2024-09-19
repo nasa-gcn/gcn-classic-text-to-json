@@ -9,11 +9,13 @@ contain_prob = norm.cdf(3) - norm.cdf(-3)
 
 
 def create_all_alexis_jsons():
-    """Function parse through an HTML table to generate the JSON associated with each row
+    """Function parse through an HTML table to generate the JSON associated with each row.
+    Then create a alexis_json directory inside an output directory.
 
     Notes
     ------
-    Function skips through the first row with a tag as that is the row associated with the row headers."""
+    Function skips through the first row with a tag as that is the row associated with the row headers.
+    """
     output_path = "./output/alexis_jsons/"
     if not os.path.exists(output_path):
         os.makedirs(output_path)
@@ -27,11 +29,16 @@ def create_all_alexis_jsons():
 
     for idx in range(1, len(rows[1:]) + 1):
         row = rows[idx]
-        output_dict = {}
+
+        output_dict = {
+            "$schema": "https://gcn.nasa.gov/schema/main/gcn/notices/classic/alexis/alert.schema.json",
+            "mission": "ALEXIS",
+        }
+
         cols = row.find_all("td")
 
         year = cols[0].text.replace("/", "-", 2)
-        output_dict["alert_datetime"] = f"{year}T{cols[1].text}Z"
+        output_dict["end_datetime"] = f"20{year}T{cols[1].text}Z"
 
         output_dict["map_duration"] = int(cols[2].text)
 
