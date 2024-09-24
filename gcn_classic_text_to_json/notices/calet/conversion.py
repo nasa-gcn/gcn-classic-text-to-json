@@ -73,7 +73,7 @@ def text_to_json_calet(notice, record_number, input):
 
 def create_all_calet_jsons():
     """Creates a `calet_json` directory and fills it with the json for all CALET triggers."""
-    output_path = "./calet_jsons/"
+    output_path = "./output/calet_jsons/"
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
@@ -82,7 +82,7 @@ def create_all_calet_jsons():
     links_set = conversion.parse_trigger_links(archive_link, prefix)
     links_list = list(links_set)
 
-    for sernum in range(1, len(links_list) + 1):
+    for sernum in range(len(links_list)):
         link = links_list[sernum]
         data = requests.get(link).text
 
@@ -97,7 +97,7 @@ def create_all_calet_jsons():
 
             output = text_to_json_calet(notice_dict, record_number, input)
 
-            with open(f"{output_path}CALET_GBM_{sernum}.json", "w") as f:
+            with open(f"{output_path}CALET_GBM_{sernum+1}.json", "w") as f:
                 json.dump(output, f)
 
             record_number += 1
