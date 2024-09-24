@@ -101,7 +101,7 @@ def text_to_json(notice, keywords_dict):
         trigger_date_data = notice[notice_date].split()
 
         trigger_date = trigger_date_data[-1]
-        if trigger_date == "(yy-mm-dd)":
+        if trigger_date == "(yy/mm/dd)":
             trigger_date = trigger_date_data[-2]
 
         trigger_time_data = notice[notice_time]
