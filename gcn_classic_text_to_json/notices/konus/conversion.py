@@ -20,7 +20,7 @@ def create_all_konus_jsons(link, sernum):
     Returns
     -------
     sernum: int
-        returns sernum to be used in the next iteration of the functio"""
+        returns sernum to be used in the next iteration of the function"""
     output_path = "./output/konus_jsons/"
     if not os.path.exists(output_path):
         os.makedirs(output_path)
