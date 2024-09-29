@@ -16,7 +16,7 @@ input = {
 
 
 def text_to_json_hete(notice, input):
-    """Function calls text_to_json and then adds specific fields depedning on notice_type.
+    """Function calls text_to_json and then adds specific fields depending on notice_type.
 
     Parameters
     -----------
@@ -28,7 +28,9 @@ def text_to_json_hete(notice, input):
     Returns
     -------
     dictionary
-        A dictionary compliant with the associated schema for the mission."""
+        A dictionary compliant with the associated schema for the mission.
+    record_number
+        the order of `notice` in the webpage"""
     output_dict = conversion.text_to_json(notice, input)
 
     output_dict["$schema"] = (
@@ -62,13 +64,13 @@ def text_to_json_hete(notice, input):
     if "WXM_CNTR_RA" and "WXM_CNTR_DEC" in notice:
         output_dict["wxm_ra"] = float(notice["WXM_CNTR_RA"].split()[0][:-1])
         output_dict["wxm_dec"] = float(notice["WXM_CNTR_DEC"].split()[0][:-1])
-        output_dict["wxm_ra_dec_error"] = float(notice["WXM_MAX_SIZE"].split()[0]) / 60
+        output_dict["wxm_ra_dec_error"] = float(notice["WXM_MAX_SIZE"].split()[0]) / 120
         output_dict["wxm_image_snr"] = float(notice["WXM_LOC_SN"].split()[0])
 
     if "SXC_CNTR_RA" and "SXC_CNTR_DEC" in notice:
         output_dict["sxc_ra"] = float(notice["SXC_CNTR_RA"].split()[0][:-1])
         output_dict["sxc_dec"] = float(notice["SXC_CNTR_DEC"].split()[0][:-1])
-        output_dict["sxc_ra_dec_error"] = float(notice["SXC_MAX_SIZE"].split()[0]) / 60
+        output_dict["sxc_ra_dec_error"] = float(notice["SXC_MAX_SIZE"].split()[0]) / 120
         output_dict["sxc_image_snr"] = float(notice["SXC_LOC_SN"].split()[0])
 
     return (output_dict, record_number)
