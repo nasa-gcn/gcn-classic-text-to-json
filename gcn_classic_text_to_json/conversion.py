@@ -131,7 +131,7 @@ def text_to_json(notice, keywords_dict):
         dec_data = notice[notice_dec].split()
 
         if dec_data[0] != "Undefined":
-            output["ra"] = float(ra_data[0][:-1])
+            output["dec"] = float(dec_data[0][:-1])
 
     if "additional" in keywords_dict:
         for json_keyword, notice_keyword_tuple in keywords_dict["additional"].items():
