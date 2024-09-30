@@ -123,8 +123,6 @@ def create_all_moa_jsons():
                 end_idx = data.find("unavailable", start_idx) + len("unavailable") + 1
 
             notice_message = email.message_from_string(data[start_idx:end_idx].strip())
-            print(link)
-            # print(notice_message)
             comment = "\n".join(notice_message.get_all("COMMENTS"))
             notice_dict = dict(notice_message)
             notice_dict["COMMENTS"] = comment
