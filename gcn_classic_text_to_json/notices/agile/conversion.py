@@ -70,6 +70,7 @@ def text_to_json_agile(notice, input, notice_type):
         output_dict["systematic_included"] = True
         output_dict["n_events_y"] = float(notice["GRB_INTEN"].split()[1])
         output_dict["snr_y"] = float(notice["GRB_SIGNIF"].split()[1])
+        output_dict["ra_dec_error"] /= 60
     elif notice_type == "MCAL":
         lon_lat_data = notice["SC_LON_LAT"].split(",")
         output_dict["longitude"] = float(lon_lat_data[0])

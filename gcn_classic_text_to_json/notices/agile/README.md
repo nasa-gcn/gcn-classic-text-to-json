@@ -1,6 +1,6 @@
 # AGILE Text Conversion
 
-Parses through all webpages with AGILE text notices and creates a JSON with GCN schema keywords. Creates a `agile_jsons` directory inside an `output` directory and saves jsons as `AGILE_{serial_number}_{record_number}.json` where serial_number is a random iterating number with no association to the notices and record_number is the current notice in the webpage.
+Parses through all webpages with AGILE text notices and creates a JSON with GCN schema keywords. Creates a `agile_jsons` directory inside an `output` directory and saves jsons as `AGILE_{serial_number}.json` where serial_number is a random iterating number with no association to the notices.
 
 ### Uses the following fields from the core schema for text notice fields
 - `id` &#8594; TRIGGER_NUM
