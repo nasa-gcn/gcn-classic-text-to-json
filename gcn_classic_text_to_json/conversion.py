@@ -116,11 +116,17 @@ def text_to_json(notice, keywords_dict):
     if "ra_dec" in keywords_dict["standard"]:
         notice_ra, notice_dec = keywords_dict["standard"]["ra_dec"]
 
-        ra_data = notice[notice_ra]
-        output["ra"] = float(ra_data.split()[0][:-1])
+        ra_data = notice[notice_ra].split()
+        if ra_data[0] == "Undefined":
+            output["ra"] = None
+        else:
+            output["ra"] = float(ra_data[0][:-1])
 
-        dec_data = notice[notice_dec]
-        output["dec"] = float(dec_data.split()[0][:-1])
+        dec_data = notice[notice_dec].split()
+        if dec_data[0] == "Undefined":
+            output["dec"] = None
+        else:
+            output["dec"] = float(dec_data[0][:-1])
 
     for json_keyword, notice_keyword_tuple in keywords_dict["additional"].items():
         notice_keyword, keyword_type = notice_keyword_tuple
