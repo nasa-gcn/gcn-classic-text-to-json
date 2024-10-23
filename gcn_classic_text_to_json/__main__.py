@@ -1,5 +1,4 @@
 from gcn_classic_text_to_json.notices.alexis import conversion as alexis_conversion
-from gcn_classic_text_to_json.notices.alexis import conversion as alexis_conversion
 from gcn_classic_text_to_json.notices.calet import conversion as calet_conversion
 from gcn_classic_text_to_json.notices.gecam import conversion as gecam_conversion
 from gcn_classic_text_to_json.notices.sk_sn import conversion as sk_sn_conversion
