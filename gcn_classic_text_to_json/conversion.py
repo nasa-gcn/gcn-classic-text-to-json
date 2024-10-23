@@ -21,6 +21,32 @@ months_of_the_year = [
 invalid_trigger_dates = ["(yy-mm-dd)", "(yy/mm/dd)", "(yyyy/mm/dd)"]
 
 
+def parse_notice(text):
+    """Convert the text of an email body to a dictionary
+
+    Parameters
+    ----------
+    text: string
+        the email body
+
+    Returns
+    --------
+    dict
+        The dictionary equivalent of the text"""
+    output = {}
+    text_list = text.split("\n")
+    for line in text_list:
+        line_data = line.split()
+        key = line_data[0][:-1]
+        value = " ".join(line_data[1:])
+        if key in output:
+            output[key] += "\n" + value
+        else:
+            output[key] = value
+
+    return output
+
+
 def parse_trigger_links(link, prefix, regex_string):
     """Returns a list of trigger_links present in `link`.
 
@@ -123,14 +149,18 @@ def text_to_json(notice, keywords_dict):
         notice_ra = keywords_dict["standard"]["ra"]
         ra_data = notice[notice_ra].split()
 
-        if ra_data[0] != "Undefined":
+        if ra_data[0] == "Undefined":
+            output["ra"] = None
+        else:
             output["ra"] = float(ra_data[0][:-1])
 
     if "dec" in keywords_dict["standard"]:
         notice_dec = keywords_dict["standard"]["dec"]
         dec_data = notice[notice_dec].split()
 
-        if dec_data[0] != "Undefined":
+        if dec_data[0] == "Undefined":
+            output["dec"] = None
+        else:
             output["dec"] = float(dec_data[0][:-1])
 
     if "additional" in keywords_dict:
