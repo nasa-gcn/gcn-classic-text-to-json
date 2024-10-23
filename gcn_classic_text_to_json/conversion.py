@@ -18,8 +18,10 @@ months_of_the_year = [
     "Dec",
 ]
 
+invalid_trigger_dates = ["(yy-mm-dd)", "(yy/mm/dd)", "(yyyy/mm/dd)"]
 
-def parse_trigger_links(link, prefix):
+
+def parse_trigger_links(link, prefix, regex_string):
     """Returns a list of trigger_links present in `link`.
 
     The function parses through each row and hyperlink present in the html
@@ -30,7 +32,9 @@ def parse_trigger_links(link, prefix):
     link: string
         The webpage with the trigger links listed.
     prefix: string
-        The prefix to be added to the incomplete link
+        The prefix to be added to the incomplete link.
+    regex_string: string
+        Regex string to search for while looking through links.
 
     Returns
     -------
@@ -42,7 +46,7 @@ def parse_trigger_links(link, prefix):
     soup = BeautifulSoup(data, "html.parser")
 
     links = set({})
-    for incomplete_link in soup.find_all("a", attrs={"href": re.compile("other")}):
+    for incomplete_link in soup.find_all("a", attrs={"href": re.compile(regex_string)}):
         link = prefix + incomplete_link.get("href")
         links.add(link)
     return links
@@ -94,15 +98,17 @@ def text_to_json(notice, keywords_dict):
         notice_id = keywords_dict["standard"]["id"]
         id_data = notice[notice_id]
         id = id_data.split()[0]
-        output["id"] = int(id)
+        output["id"] = [int(id)]
 
     if "trigger_time" in keywords_dict["standard"]:
         notice_date, notice_time = keywords_dict["standard"]["trigger_time"]
         trigger_date_data = notice[notice_date].split()
 
         trigger_date = trigger_date_data[-1]
-        if trigger_date == "(yy-mm-dd)" or trigger_date == "(yy/mm/dd)":
+        if trigger_date in invalid_trigger_dates:
             trigger_date = trigger_date_data[-2]
+        if len(trigger_date) == 8:
+            trigger_date = "20" + trigger_date
 
         trigger_time_data = notice[notice_time]
         trigger_time_start_idx = trigger_time_data.find("{")
@@ -113,30 +119,30 @@ def text_to_json(notice, keywords_dict):
         trigger_datetime = f"{trigger_date.replace('/', '-', 2)}T{trigger_time}Z"
         output["trigger_time"] = trigger_datetime
 
-    if "ra_dec" in keywords_dict["standard"]:
-        notice_ra, notice_dec = keywords_dict["standard"]["ra_dec"]
-
+    if "ra" in keywords_dict["standard"]:
+        notice_ra = keywords_dict["standard"]["ra"]
         ra_data = notice[notice_ra].split()
-        if ra_data[0] == "Undefined":
-            output["ra"] = None
-        else:
+
+        if ra_data[0] != "Undefined":
             output["ra"] = float(ra_data[0][:-1])
 
+    if "dec" in keywords_dict["standard"]:
+        notice_dec = keywords_dict["standard"]["dec"]
         dec_data = notice[notice_dec].split()
-        if dec_data[0] == "Undefined":
-            output["dec"] = None
-        else:
+
+        if dec_data[0] != "Undefined":
             output["dec"] = float(dec_data[0][:-1])
 
-    for json_keyword, notice_keyword_tuple in keywords_dict["additional"].items():
-        notice_keyword, keyword_type = notice_keyword_tuple
-        if notice.get(notice_keyword) is not None:
-            val = notice[notice_keyword].split()[0]
-            if keyword_type == "int":
-                val = int(val)
-            elif keyword_type == "float":
-                val = float(val)
-            output[json_keyword] = val
+    if "additional" in keywords_dict:
+        for json_keyword, notice_keyword_tuple in keywords_dict["additional"].items():
+            notice_keyword, keyword_type = notice_keyword_tuple
+            if notice.get(notice_keyword) is not None and notice.get(notice_keyword):
+                val = notice[notice_keyword].split()[0]
+                if keyword_type == "int":
+                    val = int(val)
+                elif keyword_type == "float":
+                    val = float(val)
+                output[json_keyword] = val
 
     output["additional_info"] = notice["COMMENTS"]
 
