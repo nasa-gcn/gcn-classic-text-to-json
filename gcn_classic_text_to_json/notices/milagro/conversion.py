@@ -88,7 +88,7 @@ def create_all_milagro_jsons():
             output = text_to_json_milagro(notice_dict, record_number, input)
 
             with open(
-                f"{output_path}MILAGRO_{sernum+1}_{record_number}.json", "w"
+                f"{output_path}MILAGRO_{sernum + 1}_{record_number}.json", "w"
             ) as f:
                 json.dump(output, f)
 
