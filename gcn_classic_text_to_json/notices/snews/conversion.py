@@ -159,7 +159,7 @@ def create_all_snews_jsons():
             else:
                 output = text_to_json_snews_131(notice_dict, input_131)
 
-            with open(f"{output_path}SNEWS_{sernum+1}.json", "w") as f:
+            with open(f"{output_path}SNEWS_{sernum + 1}.json", "w") as f:
                 json.dump(output, f)
 
             temp_start_idx = data.find("///////////", end_idx)

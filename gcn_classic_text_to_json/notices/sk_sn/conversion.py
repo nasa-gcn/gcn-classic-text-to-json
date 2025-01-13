@@ -89,7 +89,7 @@ def create_all_sk_sn_jsons():
 
             output = text_to_json_sk_sn(notice_dict, input)
 
-            with open(f"{output_path}SK_SN_{sernum+1}.json", "w") as f:
+            with open(f"{output_path}SK_SN_{sernum + 1}.json", "w") as f:
                 json.dump(output, f)
 
             temp_start_idx = data.find("///////////", end_idx)

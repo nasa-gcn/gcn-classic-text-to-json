@@ -117,7 +117,9 @@ def create_all_gecam_jsons():
 
             output = text_to_json_gecam(notice_dict, input, record_number)
 
-            with open(f"{output_path}GECAM_{sernum+1}_{record_number}.json", "w") as f:
+            with open(
+                f"{output_path}GECAM_{sernum + 1}_{record_number}.json", "w"
+            ) as f:
                 json.dump(output, f)
 
             record_number += 1

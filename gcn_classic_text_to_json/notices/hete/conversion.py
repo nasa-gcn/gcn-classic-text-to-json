@@ -102,7 +102,7 @@ def create_all_hete_trigger():
 
             output, record_number = text_to_json_hete(notice_dict, input)
 
-            with open(f"{output_path}HETE_{sernum+1}_{record_number}.json", "w") as f:
+            with open(f"{output_path}HETE_{sernum + 1}_{record_number}.json", "w") as f:
                 json.dump(output, f)
 
             temp_start_idx = data.find("///////////", end_idx)
