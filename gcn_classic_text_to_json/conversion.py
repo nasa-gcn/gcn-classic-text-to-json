@@ -35,6 +35,9 @@ def parse_trigger_links(link, prefix, regex_string):
         The prefix to be added to the incomplete link.
     regex_string: string
         Regex string to search for while looking through links.
+        The prefix to be added to the incomplete link.
+    regex_string: string
+        Regex string to search for while looking through links.
 
     Returns
     -------
